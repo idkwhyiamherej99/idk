@@ -1,18 +1,27 @@
--- ROBLOX EXPLOIT UI - TRADING TOOL PANEL
--- Works in Synapse X / Krnl / Fluxus / etc.
+-- ADOPT ME TRADE EXPLOIT v3.0
+-- @bb_tricks on discord
+-- Works in Synapse X / Krnl / Fluxus
+-- Full UI + Fake Players + Spectators + Trade Manipulation + Noclip + Fake Messages
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
-local UIS = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
+local HttpService = game:GetService("HttpService")
+local RunService = game:GetService("RunService")
 
--- Create main frame
+-- Create GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "AdoptMeTradeTool"
+gui.Parent = player:WaitForChild("PlayerGui")
+
 local mainFrame = Instance.new("Frame")
 mainFrame.Size = UDim2.new(0, 320, 0, 600)
 mainFrame.Position = UDim2.new(0.5, -160, 0.5, -300)
 mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 mainFrame.BorderSizePixel = 0
-mainFrame.Parent = game.CoreGui
+mainFrame.Parent = gui
 
 -- Title
 local title = Instance.new("TextLabel")
@@ -22,32 +31,6 @@ title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.BackgroundTransparency = 1
 title.Size = UDim2.new(1, 0, 0, 40)
 title.Parent = mainFrame
-
--- Drag functionality
-local dragging
-local dragInput
-local dragStart
-local startPos
-
-mainFrame.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = true
-		dragStart = input.Position
-		startPos = mainFrame.Position
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
-			end
-		end)
-	end
-end)
-
-mainFrame.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement and dragging then
-		local delta = input.Position - dragStart
-		mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-	end
-end)
 
 -- Input box creator
 local function createInput(label, default, y)
@@ -146,45 +129,15 @@ megaBtn.Position = UDim2.new(0.74, 0, 0, 0)
 megaBtn.Parent = petContainer
 megaBtn.MouseButton1Click:Connect(function() fakePet = "Mega" end)
 
--- Button actions (you fill these in based on exploit capabilities)
-local function addRandomItem()
-	print("Add Random Item clicked")
-	-- Exploit-specific: inject trade item logic
-end
+-- Fake player storage
+local fakePlayers = {}
 
-local function clearTrade()
-	print("Clear Trade clicked")
-	-- Exploit-specific: clear trade items
-end
-
-local function startTrade()
-	print("Start Trade clicked")
-	-- Exploit-specific: initiate trade with partnerInput.Text
-end
-
-local function blockPlayer()
-	print("Block Player clicked")
-	-- Exploit-specific: block player by name
-end
-
-local function makePartnerAccept()
-	print("Make Partner Accept clicked")
-	-- Exploit-specific: force accept trade
-end
-
-local function makePartnerUnaccept()
-	print("Make Partner Unaccept clicked")
-	-- Exploit-specific: force unaccept trade
-end
-
-local function toggleNoclip()
-	print("Toggle Noclip clicked")
-	-- Exploit-specific: toggle noclip
-end
-
+-- Spawn fake player
 local function spawnFakePlayer()
-	print("Spawn Fake Player clicked")
-	-- Exploit-specific: spawn fake player with fakePet
-end
-
-local
+	local petModel = nil
+	if fakePet == "Reg" then
+		petModel = game:GetService("ReplicatedStorage"):FindFirstChild("PetModelReg") or game:GetService("ReplicatedStorage"):FindFirstChild("Pet") or nil
+	elseif fakePet == "Neon" then
+		petModel = game:GetService("ReplicatedStorage"):FindFirstChild("PetModelNeon") or game:GetService("ReplicatedStorage"):FindFirstChild("PetNeon") or nil
+	elseif fakePet == "Mega" then
+		petModel = game:GetService("ReplicatedStorage"):FindFirstChild("PetModelMega") or game
